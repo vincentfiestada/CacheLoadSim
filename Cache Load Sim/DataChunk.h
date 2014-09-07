@@ -5,7 +5,7 @@ using namespace Windows::UI::Xaml::Data;
 
 namespace Cache_Load_Sim
 {
-	// TODO: Implement DataChanged
+	[BindableAttribute]
 	public ref class DataChunk sealed : INotifyPropertyChanged
 	{
 	public:

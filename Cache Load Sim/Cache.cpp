@@ -3,17 +3,16 @@
 
 using namespace Cache_Load_Sim;
 
-Cache::Cache(int size, int map, int replace, int addressBits, Platform::Object^ RAMTable)
+Cache::Cache(int size, int map, int replace, Platform::Object^ RAMTable)
 {
 	// size		   = number of cache entries
 	// map         = mapping algorithm to use
 	// replace     = replacement algorithm to use
-	// addressBits = the number of bits in main memory addresses
 	Size = size;
 	_entries = ref new Platform::Collections::Vector<DataChunk^>;
 	for (int i = 0; i < size; i++)
 	{
-		_entries->Append(ref new DataChunk(NOTHING, NOTHING));
+		_entries->Append(ref new DataChunk(NOTHING, 0));
 	}
 	_RAMTable = (Platform::Collections::Vector<DataChunk^>^)RAMTable;
 	_mapping = map;
@@ -24,38 +23,30 @@ Cache::Cache(int size, int map, int replace, int addressBits, Platform::Object^ 
 	_totalHitTime = 0;
 	_totalMissPenalty = 0;
 	// get the number of bitshifts to use when getting the index for direct and set assoc mapping
-	// 1) How many bits will be used for the index?
-	int tempIndex = size - 1;
-	int bitCount = 0;
-	while (tempIndex > 0)
-	{
-		// Keep shifting to the left until 0 and count number of shifts
-		tempIndex >>= 1;
-		bitCount++;
-	}
+	// 1) Get an index Template, of there are (in binary) 000 - 111 slots, you need 3 bits as index
+	//    If we take those three bits from the rightmost part of the address, we can just use
+	//    a bitwise  AND (&) with the address and the number of slots - 1
+	int bitcount = 0;
+	_mappingIndexTemplate = 0;
 	if (_mapping == Direct)
 	{
-		// 2) Subtract index bit count from number of bits in main memory addresses
-		// Number of bits to use for direct mapping is always log(base:2 of n)
-		//    if n is the number of entries in the cache
-		_mappingIndexBitShift = addressBits - bitCount;
+		bitcount = floor(log2(size));
+		for (int i = 0; i < bitcount; i++)
+		{
+			_mappingIndexTemplate <<= 1;
+			_mappingIndexTemplate += 1;
+		}
+		
 	}
 	else if (_mapping == Set)
 	{
 		// Number of bits to use for set assoc mapping is always log(base:2 of n) - 1
-		_mappingIndexBitShift = addressBits - bitCount + 1;
-	}
-}
-
-DataChunk^ Cache::getAt(int index)
-{
-	if (index >= 0 && index <= Size)
-	{
-		return _entries->GetAt(index);
-	}
-	else
-	{
-		throw ref new Platform::OutOfBoundsException(L"There is no cache entry with that address");
+		bitcount = floor(log2(size)) - 1;
+		for (int i = 0; i < bitcount; i++)
+		{
+			_mappingIndexTemplate <<= 1;
+			_mappingIndexTemplate += 1;
+		}
 	}
 }
 
@@ -72,14 +63,23 @@ void Cache::Load(int address)
 	switch (_mapping)
 	{
 	case Direct:
-		tempAddress >>= _mappingIndexBitShift;
+		tempAddress &= _mappingIndexTemplate;
 		mapStart = tempAddress;
 		mapEnd = mapStart;
 		break;
 	case Set:
-		tempAddress >>= _mappingIndexBitShift;
-		mapStart = tempAddress;
-		mapEnd = mapStart + 1;
+		if (_mappingIndexTemplate == 0)
+		{
+			tempAddress &= 1;
+			mapStart = tempAddress;
+			mapEnd = mapStart;
+		}
+		else
+		{
+			tempAddress &= _mappingIndexTemplate;
+			mapStart = tempAddress * 2;
+			mapEnd = mapStart + 1;
+		}
 		break;
 	case Full:
 		mapStart = 0;
@@ -92,10 +92,10 @@ void Cache::Load(int address)
 	// Now that we know the start and end of the map, look for the data chunk w/ same address in the cache
 	for (unsigned int i = mapStart; i <= mapEnd; i++)
 	{
-		_totalHitTime++; // each time we look at a slot, hit time increases
+		Cache::TotalHitTime += 1; // each time we look at a slot, hit time increases
 		if (_entries->GetAt(i)->Address == address)
 		{
-			_totalHits++;
+			Cache::TotalHits += 1;
 			if (_replacement == LRU || _replacement == LFU)
 			{
 				_entries->GetAt(i)->AccessFrequency++;
@@ -107,20 +107,22 @@ void Cache::Load(int address)
 	// Load function did not return, so the data is not in the cache yet
 	//      First, increment total miss count...and then
 	//		we need to load it from Main Memory
-	_totalMisses++;
+	Cache::TotalMisses += 1;
 
 	// Find an empty slot in the 'map'
 	for (unsigned int i = mapStart; i <= mapEnd; i++)
 	{
 		if (i < 0 || i > _entries->Size - 1) continue;
 		// each time we look for an empty slot, increment total miss penalty
-		_totalMissPenalty++;
+		Cache::TotalMissPenalty += 1;
 		if (_entries->GetAt(i)->Address == NOTHING) // If address is the constant NOTHING, the slot is empty
 		{
 			// Now we can load the data chunk from RAM
 			_entries->SetAt(i, _RAMTable->GetAt(address));
 			if (_replacement == LRU || _replacement == LFU)
 			{
+				_lastFIFOTracker += 1;
+				_entries->GetAt(i)->AccessFrequency = _lastFIFOTracker;
 				_entries->GetAt(i)->AccessFrequency++;
 			}
 			else if (_replacement == FIFO)
@@ -144,6 +146,7 @@ void Cache::Load(int address)
 	//			And it is reset when the chunk is unloaded
 	//		If LFU, the frequency is incremented each time a chunk is used
 	//			But it is never reset
+	//		Note: LRU & LFU still incorporate the lastFIFOTracker so that there is no bias on positioning
 
 	for (unsigned int i = mapStart; i <= mapEnd; i++)
 	{
@@ -163,7 +166,9 @@ void Cache::Load(int address)
 	// Now take care of the newly loaded chunk's frequency counter
 	if (_replacement == LRU || _replacement == LFU)
 	{
-		_entries->GetAt(indexOfSlotToReplace)->AccessFrequency++;
+		_lastFIFOTracker += 1;
+		_entries->GetAt(indexOfSlotToReplace)->AccessFrequency = _lastFIFOTracker;
+		_entries->GetAt(indexOfSlotToReplace)->AccessFrequency += 1;
 	}
 	else if (_replacement == FIFO)
 	{

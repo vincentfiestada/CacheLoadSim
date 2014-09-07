@@ -4,18 +4,22 @@
 
 #define NOTHING -1
 #define Direct 0
-#define Full 1
-#define Set 2
+#define Set 1
+#define Full 2
 #define FIFO 0
 #define LRU 1
 #define LFU 2
 
+using namespace Windows::UI::Xaml::Data;
+using namespace Windows::Foundation::Collections;
+
 namespace Cache_Load_Sim
 {
-	public ref class Cache sealed
+	[BindableAttribute]
+	public ref class Cache sealed : INotifyPropertyChanged
 	{
 	public:
-		Cache(int size, int map, int replace, int addressBits, Platform::Object^ RAMTable);
+		Cache(int size, int map, int replace, Platform::Object^ RAMTable);
 
 		property int Size
 		{
@@ -70,27 +74,54 @@ namespace Cache_Load_Sim
 		}
 		property int TotalHits
 		{
+			void set(int x)
+			{
+				_totalHits = x;
+				PropertyChanged(this, ref new PropertyChangedEventArgs(ref new String(L"TotalHits")));
+			}
 			int get() { return _totalHits; }
 		}
 		property int TotalMisses
 		{
+			void set(int x)
+			{
+				_totalMisses = x;
+				PropertyChanged(this, ref new PropertyChangedEventArgs(ref new String(L"TotalMisses")));
+			}
 			int get() { return _totalMisses; }
 		}
 		property int TotalHitTime
 		{
+			void set(int x)
+			{
+				_totalHitTime = x;
+				PropertyChanged(this, ref new PropertyChangedEventArgs(ref new String(L"TotalHitTime")));
+			}
 			int get() { return _totalHitTime; }
 		}
 		property int TotalMissPenalty
 		{
+			void set(int x)
+			{
+				_totalMissPenalty = x;
+				PropertyChanged(this, ref new PropertyChangedEventArgs(ref new String(L"TotalMissPenalty")));
+			}
 			int get() { return _totalMissPenalty; }
 		}
-
-		DataChunk^ getAt(int index);
+		property Platform::Object^ Slots
+		{
+			Platform::Object^ get()
+			{
+				return _entries;
+			}
+		}
 		void Load(int address);
+
+		virtual event PropertyChangedEventHandler^ PropertyChanged;
 
 	private:
 		int _size;
-		int _mappingIndexBitShift;
+		int _mappingIndexTemplate;
 		Platform::Collections::Vector<DataChunk^>^ _RAMTable;
 		Platform::Collections::Vector<DataChunk^>^ _entries;
 		int _lastFIFOTracker;

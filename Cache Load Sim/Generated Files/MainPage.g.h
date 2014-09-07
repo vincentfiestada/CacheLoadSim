@@ -12,7 +12,21 @@ namespace Windows {
     namespace UI {
         namespace Xaml {
             namespace Controls {
+                ref class ListView;
+                ref class StackPanel;
+                ref class Button;
+                ref class TextBox;
+                ref class ComboBox;
                 ref class TextBlock;
+            }
+        }
+    }
+}
+namespace Windows {
+    namespace UI {
+        namespace Xaml {
+            namespace Documents {
+                ref class Run;
             }
         }
     }
@@ -30,12 +44,23 @@ namespace Cache_Load_Sim
     private:
         bool _contentLoaded;
     
-        private: ::Windows::UI::Xaml::Controls::TextBlock^ simulationStats;
-        private: ::Windows::UI::Xaml::Controls::TextBlock^ totalHitsResult;
-        private: ::Windows::UI::Xaml::Controls::TextBlock^ totalMissesResult;
-        private: ::Windows::UI::Xaml::Controls::TextBlock^ totalHitTimeResult;
-        private: ::Windows::UI::Xaml::Controls::TextBlock^ totalMissPenaltyResult;
-        private: ::Windows::UI::Xaml::Controls::TextBlock^ finalState;
+        private: ::Windows::UI::Xaml::Controls::ListView^ MainMemoryContentsDisplay;
+        private: ::Windows::UI::Xaml::Controls::ListView^ CacheSlotsDisplay;
+        private: ::Windows::UI::Xaml::Controls::StackPanel^ StatCounters;
+        private: ::Windows::UI::Xaml::Controls::StackPanel^ SimulationInfo;
+        private: ::Windows::UI::Xaml::Controls::Button^ ResetSimulationButton;
+        private: ::Windows::UI::Xaml::Controls::TextBox^ ResetCacheSizeTextBox;
+        private: ::Windows::UI::Xaml::Controls::ComboBox^ ResetMappingAlgorithmComboBox;
+        private: ::Windows::UI::Xaml::Controls::ComboBox^ ResetReplacementAlgorithmComboBox;
+        private: ::Windows::UI::Xaml::Controls::TextBox^ AddressToLoadTextBox;
+        private: ::Windows::UI::Xaml::Controls::Button^ LoadAddressButton;
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ CacheMappingAlgorithm;
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ CacheReplacementAlgorithm;
+        private: ::Windows::UI::Xaml::Documents::Run^ CacheEntriesNumberDisplay;
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ TotalHitsDisplay;
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ TotalHitTimeDisplay;
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ TotalMissesDisplay;
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ TotalMissPenaltyDisplay;
     };
 }
 

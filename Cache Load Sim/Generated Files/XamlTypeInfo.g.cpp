@@ -72,6 +72,21 @@
         return ref new XamlSystemBaseType(typeName);
     }
 
+    if (typeName == L"Object")
+    {
+        return ref new XamlSystemBaseType(typeName);
+    }
+
+    if (typeName == L"Int32")
+    {
+        return ref new XamlSystemBaseType(typeName);
+    }
+
+    if (typeName == L"String")
+    {
+        return ref new XamlSystemBaseType(typeName);
+    }
+
     if (typeName == L"Cache_Load_Sim.MainPage")
     {
         ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Windows.UI.Xaml.Controls.Page"));
@@ -84,13 +99,248 @@
         return userType;
     }
 
+    if (typeName == L"Cache_Load_Sim.DataChunk")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Object"));
+        userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
+        userType->AddMemberName(L"AccessFrequency");
+        userType->AddMemberName(L"Data");
+        userType->AddMemberName(L"Address");
+        userType->SetIsBindable();
+        return userType;
+    }
+
+    if (typeName == L"Cache_Load_Sim.Cache")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Object"));
+        userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
+        userType->AddMemberName(L"Slots");
+        userType->AddMemberName(L"TotalMissPenalty");
+        userType->AddMemberName(L"TotalHitTime");
+        userType->AddMemberName(L"TotalMisses");
+        userType->AddMemberName(L"TotalHits");
+        userType->AddMemberName(L"ReplacementAlgorithm");
+        userType->AddMemberName(L"MappingAlgorithm");
+        userType->AddMemberName(L"Size");
+        userType->SetIsBindable();
+        return userType;
+    }
+
     return nullptr;
 }
 
 ::Windows::UI::Xaml::Markup::IXamlMember^ ::XamlTypeInfo::InfoProvider::XamlTypeInfoProvider::CreateXamlMember(::Platform::String^ longMemberName)
 {
-    // No Local Properties
-    (void)longMemberName; // Unused parameter
+    if (longMemberName == L"Cache_Load_Sim.DataChunk.AccessFrequency")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"AccessFrequency", L"Int32");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::DataChunk^)instance;
+                auto value = ref new ::Platform::Box<::default::int32>(that->AccessFrequency);
+                return value;
+            };
+
+        xamlMember->Setter =
+            [](Object^ instance, Object^ value) -> void
+            {
+                auto that = (::Cache_Load_Sim::DataChunk^)instance;
+                auto boxedValue = (::Platform::IBox<::default::int32>^)value;
+                that->AccessFrequency = boxedValue->Value;
+            };
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.DataChunk.Data")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"Data", L"Int32");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::DataChunk^)instance;
+                auto value = ref new ::Platform::Box<::default::int32>(that->Data);
+                return value;
+            };
+
+        xamlMember->Setter =
+            [](Object^ instance, Object^ value) -> void
+            {
+                auto that = (::Cache_Load_Sim::DataChunk^)instance;
+                auto boxedValue = (::Platform::IBox<::default::int32>^)value;
+                that->Data = boxedValue->Value;
+            };
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.DataChunk.Address")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"Address", L"Int32");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::DataChunk^)instance;
+                auto value = ref new ::Platform::Box<::default::int32>(that->Address);
+                return value;
+            };
+
+        xamlMember->Setter =
+            [](Object^ instance, Object^ value) -> void
+            {
+                auto that = (::Cache_Load_Sim::DataChunk^)instance;
+                auto boxedValue = (::Platform::IBox<::default::int32>^)value;
+                that->Address = boxedValue->Value;
+            };
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.Cache.Slots")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"Slots", L"Object");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                return that->Slots;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.Cache.TotalMissPenalty")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"TotalMissPenalty", L"Int32");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto value = ref new ::Platform::Box<::default::int32>(that->TotalMissPenalty);
+                return value;
+            };
+
+        xamlMember->Setter =
+            [](Object^ instance, Object^ value) -> void
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto boxedValue = (::Platform::IBox<::default::int32>^)value;
+                that->TotalMissPenalty = boxedValue->Value;
+            };
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.Cache.TotalHitTime")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"TotalHitTime", L"Int32");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto value = ref new ::Platform::Box<::default::int32>(that->TotalHitTime);
+                return value;
+            };
+
+        xamlMember->Setter =
+            [](Object^ instance, Object^ value) -> void
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto boxedValue = (::Platform::IBox<::default::int32>^)value;
+                that->TotalHitTime = boxedValue->Value;
+            };
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.Cache.TotalMisses")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"TotalMisses", L"Int32");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto value = ref new ::Platform::Box<::default::int32>(that->TotalMisses);
+                return value;
+            };
+
+        xamlMember->Setter =
+            [](Object^ instance, Object^ value) -> void
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto boxedValue = (::Platform::IBox<::default::int32>^)value;
+                that->TotalMisses = boxedValue->Value;
+            };
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.Cache.TotalHits")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"TotalHits", L"Int32");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto value = ref new ::Platform::Box<::default::int32>(that->TotalHits);
+                return value;
+            };
+
+        xamlMember->Setter =
+            [](Object^ instance, Object^ value) -> void
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto boxedValue = (::Platform::IBox<::default::int32>^)value;
+                that->TotalHits = boxedValue->Value;
+            };
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.Cache.ReplacementAlgorithm")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"ReplacementAlgorithm", L"String");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                return that->ReplacementAlgorithm;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.Cache.MappingAlgorithm")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"MappingAlgorithm", L"String");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                return that->MappingAlgorithm;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Cache_Load_Sim.Cache.Size")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"Size", L"Int32");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto value = ref new ::Platform::Box<::default::int32>(that->Size);
+                return value;
+            };
+
+        xamlMember->Setter =
+            [](Object^ instance, Object^ value) -> void
+            {
+                auto that = (::Cache_Load_Sim::Cache^)instance;
+                auto boxedValue = (::Platform::IBox<::default::int32>^)value;
+                that->Size = boxedValue->Value;
+            };
+        return xamlMember;
+    }
+
     return nullptr;
 }
 

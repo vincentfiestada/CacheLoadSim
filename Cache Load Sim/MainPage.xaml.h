@@ -23,5 +23,10 @@ namespace Cache_Load_Sim
 	private:
 		Vector<DataChunk^>^ MainMemory;
 		Cache^ ProcessorCache;
+
+		void LoadAddressButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void ShowErrorDialogBox(Platform::Object^ sender, Platform::String^ message);
+		void CommandInvokedHandler(Windows::UI::Popups::IUICommand^ command);
+		void ResetSimulationButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }

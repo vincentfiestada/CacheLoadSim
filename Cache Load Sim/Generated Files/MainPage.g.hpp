@@ -22,22 +22,55 @@ void ::Cache_Load_Sim::MainPage::InitializeComponent()
     // Call LoadComponent on ms-appx:///MainPage.xaml
     ::Windows::UI::Xaml::Application::LoadComponent(this, ref new ::Windows::Foundation::Uri(L"ms-appx:///MainPage.xaml"), ::Windows::UI::Xaml::Controls::Primitives::ComponentResourceLocation::Application);
 
-    // Get the TextBlock named 'simulationStats'
-    simulationStats = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"simulationStats"));
-    // Get the TextBlock named 'totalHitsResult'
-    totalHitsResult = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"totalHitsResult"));
-    // Get the TextBlock named 'totalMissesResult'
-    totalMissesResult = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"totalMissesResult"));
-    // Get the TextBlock named 'totalHitTimeResult'
-    totalHitTimeResult = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"totalHitTimeResult"));
-    // Get the TextBlock named 'totalMissPenaltyResult'
-    totalMissPenaltyResult = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"totalMissPenaltyResult"));
-    // Get the TextBlock named 'finalState'
-    finalState = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"finalState"));
+    // Get the ListView named 'MainMemoryContentsDisplay'
+    MainMemoryContentsDisplay = safe_cast<::Windows::UI::Xaml::Controls::ListView^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"MainMemoryContentsDisplay"));
+    // Get the ListView named 'CacheSlotsDisplay'
+    CacheSlotsDisplay = safe_cast<::Windows::UI::Xaml::Controls::ListView^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"CacheSlotsDisplay"));
+    // Get the StackPanel named 'StatCounters'
+    StatCounters = safe_cast<::Windows::UI::Xaml::Controls::StackPanel^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"StatCounters"));
+    // Get the StackPanel named 'SimulationInfo'
+    SimulationInfo = safe_cast<::Windows::UI::Xaml::Controls::StackPanel^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"SimulationInfo"));
+    // Get the Button named 'ResetSimulationButton'
+    ResetSimulationButton = safe_cast<::Windows::UI::Xaml::Controls::Button^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"ResetSimulationButton"));
+    // Get the TextBox named 'ResetCacheSizeTextBox'
+    ResetCacheSizeTextBox = safe_cast<::Windows::UI::Xaml::Controls::TextBox^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"ResetCacheSizeTextBox"));
+    // Get the ComboBox named 'ResetMappingAlgorithmComboBox'
+    ResetMappingAlgorithmComboBox = safe_cast<::Windows::UI::Xaml::Controls::ComboBox^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"ResetMappingAlgorithmComboBox"));
+    // Get the ComboBox named 'ResetReplacementAlgorithmComboBox'
+    ResetReplacementAlgorithmComboBox = safe_cast<::Windows::UI::Xaml::Controls::ComboBox^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"ResetReplacementAlgorithmComboBox"));
+    // Get the TextBox named 'AddressToLoadTextBox'
+    AddressToLoadTextBox = safe_cast<::Windows::UI::Xaml::Controls::TextBox^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"AddressToLoadTextBox"));
+    // Get the Button named 'LoadAddressButton'
+    LoadAddressButton = safe_cast<::Windows::UI::Xaml::Controls::Button^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"LoadAddressButton"));
+    // Get the TextBlock named 'CacheMappingAlgorithm'
+    CacheMappingAlgorithm = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"CacheMappingAlgorithm"));
+    // Get the TextBlock named 'CacheReplacementAlgorithm'
+    CacheReplacementAlgorithm = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"CacheReplacementAlgorithm"));
+    // Get the Run named 'CacheEntriesNumberDisplay'
+    CacheEntriesNumberDisplay = safe_cast<::Windows::UI::Xaml::Documents::Run^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"CacheEntriesNumberDisplay"));
+    // Get the TextBlock named 'TotalHitsDisplay'
+    TotalHitsDisplay = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"TotalHitsDisplay"));
+    // Get the TextBlock named 'TotalHitTimeDisplay'
+    TotalHitTimeDisplay = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"TotalHitTimeDisplay"));
+    // Get the TextBlock named 'TotalMissesDisplay'
+    TotalMissesDisplay = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"TotalMissesDisplay"));
+    // Get the TextBlock named 'TotalMissPenaltyDisplay'
+    TotalMissPenaltyDisplay = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"TotalMissPenaltyDisplay"));
 }
 
 void ::Cache_Load_Sim::MainPage::Connect(int connectionId, Platform::Object^ target)
 {
+    switch (connectionId)
+    {
+    case 1:
+        (safe_cast<::Windows::UI::Xaml::Controls::Primitives::ButtonBase^>(target))->Click +=
+            ref new ::Windows::UI::Xaml::RoutedEventHandler(this, (void (::Cache_Load_Sim::MainPage::*)(Platform::Object^, Windows::UI::Xaml::RoutedEventArgs^))&MainPage::ResetSimulationButton_Click);
+        break;
+    case 2:
+        (safe_cast<::Windows::UI::Xaml::Controls::Primitives::ButtonBase^>(target))->Click +=
+            ref new ::Windows::UI::Xaml::RoutedEventHandler(this, (void (::Cache_Load_Sim::MainPage::*)(Platform::Object^, Windows::UI::Xaml::RoutedEventArgs^))&MainPage::LoadAddressButton_Click);
+        break;
+    }
     (void)connectionId; // Unused parameter
     (void)target; // Unused parameter
     _contentLoaded = true;
